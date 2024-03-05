@@ -23,7 +23,8 @@ jobs:
       - name: Download Architect
         run: |
           wget -q $(curl -sS https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
-          ls -la
+          Architect=$(ls | grep "architect-v")
+          tar xvzf $Architect
           chmod +x ./architect
           ./architect version
 
