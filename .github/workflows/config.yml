@@ -24,7 +24,9 @@ jobs:
         run: |
           wget -q $(curl -sS https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
           Architect=$(ls | grep "architect-v")
+          ArchitectDir=$(echo $Architect | sed 's/\.tar\.gz$//')
           tar xvzf $Architect
+          cd $ArchitectDir
           chmod +x ./architect
           ./architect version
 
