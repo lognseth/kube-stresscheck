@@ -31,7 +31,7 @@ metadata:
   name: kube-stresscheck
   namespace: kube-system
 ---
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodSecurityPolicy
 metadata:
   name: kube-stresscheck-psp
