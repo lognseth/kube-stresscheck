@@ -1,0 +1,44 @@
+name: Build and Deploy kube-stresscheck
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PAT }}
+
+      - name: Download Architect
+        run: |
+          wget -q $(curl -sS https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
+          chmod +x ./architect
+          ./architect version
+
+      - name: Build with Architect
+        run: ./architect build
+
+      - name: Deploy with Architect
+        if: github.ref == 'refs/heads/master'
+        run: ./architect deploy
+
+      # - name: Build and push kube-stresscheck
+      #   id: docker_build
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: lognseth/kube-stresscheck:latest, lognseth/kube-stresscheck:${{ github.sha }}
+      # - name: Image digest
+      #   run: echo ${{ steps.docker_build.outputs.digest }}

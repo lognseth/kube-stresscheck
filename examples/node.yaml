@@ -74,4 +74,4 @@ spec:
         runAsUser: 0
       containers:
         - name: kube-stresscheck
-          image: quay.io/giantswarm/kube-stresscheck:latest
+          image: lognseth/kube-stresscheck:latest
